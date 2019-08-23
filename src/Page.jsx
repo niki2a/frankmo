@@ -1,15 +1,31 @@
-// import { useState } from 'react';
-import * as d3 from 'd3';
-// import generator from './utils/generator';
-// import LinePlot from './Plots';
+import React, { useState, useEffect } from 'react';
+import { csv } from 'd3-fetch';
+import { timeParse } from 'd3-time-format';
+import { format } from 'd3-format';
+import LinePlot from './Plots';
+import Spinner from './Spinner';
+
+const parseDate = timeParse('%Y-%m-%d');
+const formatPrice = format('.4f');
 
 export default () => {
-  d3.csv('/data/eurusd_hour.csv').then(d => console.log('d', d));
-  // const [data] = useState(() => );
-  // csv(csvData).then(d => console.log('d', d));
-  // fetch('../public/data/eurusd_hour.csv').then(d => console.log('d', d));
-  // const [data] = useState(() => generator(100));
+  const [data, setData] = useState([]);
 
-  return null;
-  // return <LinePlot data={data} size={[1000, 500]} />;
+  useEffect(() => {
+    (async () => {
+      const result = await csv('/data/eurusd_hour.csv').then(rows =>
+        rows.map(order => ({
+          date: parseDate(order.Date),
+          price: formatPrice(order.BidClose)
+        }))
+      );
+      setData(result);
+    })();
+  }, []);
+
+  if (!data.length) {
+    return <Spinner />;
+  }
+
+  return <LinePlot data={data.slice(0, 100)} size={[1000, 500]} />;
 };
