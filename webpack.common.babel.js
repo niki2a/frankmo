@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { join } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 module.exports = {
   entry: join(__dirname, '/src/main.js'),
@@ -32,8 +31,7 @@ module.exports = {
       template: join(__dirname, '/src/index.html'),
       filename: 'index.html',
       inject: 'body'
-    }),
-    new CopyWebpackPlugin(['assets/static'])
+    })
   ],
 
   output: {
