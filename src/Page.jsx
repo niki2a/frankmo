@@ -1,13 +1,13 @@
 // import { useState } from 'react';
-import { csv } from 'd3-fetch';
+import * as d3 from 'd3';
 // import generator from './utils/generator';
 // import LinePlot from './Plots';
 
 export default () => {
+  d3.csv('/data/eurusd_hour.csv').then(d => console.log('d', d));
   // const [data] = useState(() => );
-  fetch('../data/eurusd_hour.csv').then(d => console.log('d', d));
-  // const data = csv('../data/eurusd_hour.csv').then(d => console.log('d', d));
-  // console.log('>>> data', data);
+  // csv(csvData).then(d => console.log('d', d));
+  // fetch('../public/data/eurusd_hour.csv').then(d => console.log('d', d));
   // const [data] = useState(() => generator(100));
 
   return null;
