@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { scaleLinear } from 'd3-scale';
-import { max, min } from 'd3-array';
+import { scaleLinear, scaleTime } from 'd3-scale';
+import { extent } from 'd3-array';
 import { line } from 'd3-shape';
 import { select } from 'd3-selection';
 
@@ -12,13 +12,13 @@ function createBarChart(node, size, data) {
   }
 
   const [width, height] = size;
-  const dataMax = max(data);
-  const dataMin = min(data);
-  const xScale = scaleLinear()
-    .domain([0, data.length])
+
+  const xScale = scaleTime()
+    .domain(extent(data, d => d.date))
     .range([0, width]);
+
   const yScale = scaleLinear()
-    .domain([dataMin, dataMax])
+    .domain(extent(data, d => +d.price))
     .range([height, 0]);
 
   const svg = select(node.current)
@@ -28,8 +28,8 @@ function createBarChart(node, size, data) {
     .attr('style', 'fill: blue;');
 
   const visualLine = line()
-    .x((d, i) => xScale(i))
-    .y(d => yScale(d));
+    .x(d => xScale(d.date))
+    .y(d => yScale(d.price));
 
   svg
     .append('path')
@@ -42,14 +42,24 @@ function createBarChart(node, size, data) {
 const LinePlot = ({ size, data }) => {
   const [width, height] = size;
   const node = useRef(null);
-  useEffect(() => createBarChart(node, size, data), [node, size, data]);
+  useEffect(() => {
+    if (data.length === 0) {
+      return;
+    }
+    createBarChart(node, size, data);
+  }, [node, size, data]);
 
   return <svg ref={node} width={width} height={height} />;
 };
 
 LinePlot.propTypes = {
   size: PropTypes.arrayOf(PropTypes.number).isRequired,
-  data: PropTypes.arrayOf(PropTypes.number).isRequired
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      date: PropTypes.date,
+      price: PropTypes.string
+    })
+  ).isRequired
 };
 
 export default LinePlot;
