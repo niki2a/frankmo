@@ -2,22 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { csv } from 'd3-fetch';
 import { timeParse } from 'd3-time-format';
 import { format } from 'd3-format';
+import { makeRangeIterator } from './utils/range';
 import LinePlot from './Plots';
 import Spinner from './Spinner';
 
-const STEP = 100;
+const STEP = 5;
+const DATA_WIDNOW_SIZE = 100;
 const parseDate = timeParse('%Y-%m-%d');
 const formatPrice = format('.4f');
 
-function* makeRangeIterator(dataArray = [], step = 1) {
-  for (let i = step; i <= dataArray.length - step; i += step) {
-    yield dataArray.slice(i, i + step);
-  }
-}
-
 export default () => {
   const [data, setData] = useState([]);
-  const [activeData, setActiveData] = useState(data.slice(0, STEP));
+  const [activeData, setActiveData] = useState(data.slice(0, DATA_WIDNOW_SIZE));
   const getDataArray = useRef();
 
   useEffect(() => {
@@ -31,7 +27,7 @@ export default () => {
       setData(result);
       // set generator with value from the hook activeData
       // use [] to run the effect only once
-      getDataArray.current = makeRangeIterator(result, STEP);
+      getDataArray.current = makeRangeIterator(result, DATA_WIDNOW_SIZE, STEP);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
