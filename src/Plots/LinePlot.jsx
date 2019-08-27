@@ -6,8 +6,8 @@ import { extent } from 'd3-array';
 import { line } from 'd3-shape';
 // import { select } from 'd3-selection';
 
-function createLinePlot(node, size, data) {
-  if (!node || !node.current || !data) {
+function createLinePlot(size, data) {
+  if (!data) {
     return undefined;
   }
 
@@ -21,25 +21,10 @@ function createLinePlot(node, size, data) {
     .domain(extent(data, d => +d.price))
     .range([height, 0]);
 
-  // const svg = select(node.current)
-  //   .attr('width', width)
-  //   .attr('height', height)
-  //   .append('g');
-
-  // .selectAll('g');
-  // .enter()
-  // .data(data);
-
   const visualLine = line()
     .x(d => xScale(d.date))
     .y(d => yScale(d.price));
 
-  // svg
-  //   .append('path')
-  //   .attr('style', 'stroke: steelblue;stroke-width: 2;fill: none;')
-  //   .attr('d', visualLine(data));
-
-  // svg.exit().remove();
   return visualLine(data);
 }
 
@@ -49,13 +34,13 @@ const LinePlot = ({ size, data }) => {
   const [linePath, setLinePath] = useState(null);
 
   useEffect(() => {
-    setLinePath(createLinePlot(node, size, data));
-  }, [node, size, data]);
+    setLinePath(createLinePlot(size, data));
+  }, [size, data]);
 
   return (
     <svg ref={node} width={width} height={height}>
       <g>
-        <path d={linePath} />
+        <path style={{ stroke: 'steelblue', strokeWidth: '2', fill: 'none' }} d={linePath} />
       </g>
     </svg>
   );
