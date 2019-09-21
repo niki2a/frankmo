@@ -18,7 +18,7 @@ export default () => {
 
   useEffect(() => {
     (async () => {
-      const result = await csv('/data/eurusd_hour.csv').then(rows =>
+      const result = await csv('public/data/eurusd_hour.csv').then(rows =>
         rows.map(order => ({
           date: parseDate(order.Date),
           price: formatPrice(order.BidClose)
