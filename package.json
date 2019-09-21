@@ -71,6 +71,7 @@
   "scripts": {
     "start": "webpack-dev-server --hot --inline --config webpack.dev.babel.js",
     "build": "webpack --config webpack.prod.babel.js",
+    "build:dev": "webpack --config webpack.dev.babel.js",
     "clean": "rm -rf dist/*"
   },
   "eslintConfig": {
