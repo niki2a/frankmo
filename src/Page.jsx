@@ -3,7 +3,7 @@ import { csv } from 'd3-fetch';
 import { timeParse } from 'd3-time-format';
 import { format } from 'd3-format';
 import { makeRangeIterator } from './utils/range';
-import LinePlot from './Plots';
+import LinePlot from './Plots/LinePlot';
 import Spinner from './Spinner';
 
 const STEP = 5;
@@ -46,13 +46,21 @@ export default () => {
   return (
     <>
       <div
-        style={{ cursor: 'pointer' }}
+        style={{
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          width: '150px',
+          height: '50px',
+          outline: 'none',
+          userSelect: 'none',
+          lineHeight: '40px'
+        }}
         role="button"
         onClick={handleClick}
         onKeyPress={undefined}
         tabIndex={0}
       >
-        CLick me
+        Show next week
       </div>
       <LinePlot data={activeData} size={[1000, 500]} />
     </>
