@@ -1,5 +1,5 @@
 jobs:
-  - build-node:
+  build-node:
     docker:
       - image: circleci/node:10.15.3
     steps:
