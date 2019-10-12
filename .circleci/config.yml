@@ -1,16 +1,15 @@
-version: 2
 jobs:
   hello-world:
     machine: true
     steps:
       - run:
-          command: echo "Hello World!"
+          command: echo "Hello World"
 
 workflows:
   version: 2
   main:
-  jobs:
-    - hello-world:
-        filters:
-          branches:
-            only: circleci
+    jobs:
+      - hello-world:
+          filters:
+            branches:
+              only: circleci
