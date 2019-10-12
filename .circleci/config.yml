@@ -1,15 +1,26 @@
 jobs:
-  hello-world:
-    machine: true
+  - build-node:
+    docker:
+      - image: circleci/node:10.15.3
     steps:
-      - run:
-          command: echo "Hello World"
+      - checkout
+      - run: npm install && npm run build
+  # - build-image:
+  #   machine: true
+  #   steps:
+  #     - run:
+  #         command: echo ">>> Building Docker image"
+  #     - store_artifacts:
+  #         path: /tmp/artifacts
+  #         destination: build
 
 workflows:
   version: 2
   main:
     jobs:
-      - hello-world:
+      - build-node:
           filters:
             branches:
               only: circleci
+            # tags:
+            #   only: /v.*/
