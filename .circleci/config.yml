@@ -3,7 +3,9 @@ executors:
   docker-builder:
     environment:
       IMAGE_NAME: jonathancardoso/building-on-ci
-    machine: true
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    working_directory: ~
 jobs:
   build-node:
     docker:
@@ -16,7 +18,7 @@ jobs:
     # machine: true
     steps:
       - checkout
-      # - setup_remote_docker
+      - setup_remote_docker
       - run:
           name: Build Docker image
           command: |
