@@ -5,20 +5,30 @@ executors:
       IMAGE_NAME: niki2a/d3stocks
     docker:
       - image: circleci/buildpack-deps:stretch
-jobs:
-  build-node:
+    working_directory: /node-app
+  node-builder:
+    environment:
+      IMAGE_NAME: niki2a/d3stocks
     docker:
       - image: circleci/node:10.15.3
+    working_directory: /node-app
+
+jobs:
+  build-node:
+    executor: node-builder
     steps:
       - checkout
       - run: npm install && npm run build
-      - run: echo $(pwd)
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - dist
   build-image:
     executor: docker-builder
     steps:
-      - checkout
+      - attach_workspace:
+          at: workspace
       - setup_remote_docker
-      - run: echo $(pwd)
       - run:
           name: Build Docker image
           command: |
