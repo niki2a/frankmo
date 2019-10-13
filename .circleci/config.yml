@@ -1,4 +1,10 @@
 version: 2.1
+executors:
+  docker-builder:
+    environment:
+      IMAGE_NAME: niki2a/d3stocks
+    docker:
+      - image: circleci/buildpack-deps:stretch
 jobs:
   build-node:
     docker:
@@ -6,13 +12,13 @@ jobs:
     steps:
       - checkout
       - run: npm install && npm run build
+      - run: echo $(pwd)
   build-image:
-    machine: true
-    environment:
-      IMAGE_NAME: niki2a/d3stocks
+    executor: docker-builder
     steps:
       - checkout
-      # - setup_remote_docker
+      - setup_remote_docker
+      - run: echo $(pwd)
       - run:
           name: Build Docker image
           command: |
