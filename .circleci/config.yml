@@ -5,13 +5,13 @@ executors:
       IMAGE_NAME: niki2a/d3stocks
     docker:
       - image: circleci/buildpack-deps:stretch
-    working_directory: /node-app
+    # working_directory: /node-app
   node-builder:
     environment:
       IMAGE_NAME: niki2a/d3stocks
     docker:
       - image: circleci/node:10.15.3
-    working_directory: /node-app
+    # working_directory: /node-app
 
 jobs:
   build-node:
